@@ -25,9 +25,9 @@
 
 <!-- PROJECT DESCRIPTION -->
 
-# 📖 [task mangement api] <a name="about-project"></a>
+# 📖 [Prpduct list api] <a name="about-project"></a>
 
-**task management api** this is a simple api for product list management with all crud operation, and custom error hanfling
+**product list api** this is a simple api for product list management with all crud operation, and custom error hanfling
 
 ## 🛠 Built With <a name="built-with"></a>
 
