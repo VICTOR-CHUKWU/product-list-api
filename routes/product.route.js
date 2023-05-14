@@ -7,10 +7,11 @@ const {
   deleteProduct,
   createProduct,
 } = require("../controller/productController");
+const authMidleware = require("../middleware/auth");
 
 router.get("/", getProducts);
 
-router.post("/", createProduct);
+router.post("/", authMidleware, createProduct);
 
 router.patch("/:id", editProduct);
 

@@ -18,14 +18,16 @@ const getProduct = asyncWrapper(async (req, res, next) => {
 });
 
 const createProduct = asyncWrapper(async (req, res, next) => {
-  const { name } = req.body;
-  const product = await Product.create(req.body);
-  if (!name) {
-    return next(
-      createCustomeError("can not create product without name field", 400)
-    );
+  const { name, type, location, description, price } = req.body;
+  const product = await Product.create({ ...req.body, user_id: req.user.id });
+  if (!name || !type || !location || !description || !price) {
+    return next(createCustomeError("bad request", 400));
   }
-  res.status(201).json({ product: product });
+  res.status(201).json({
+    success: true,
+    message: "product created successfully",
+    product: product,
+  });
 });
 
 const deleteProduct = asyncWrapper(async (req, res, next) => {
@@ -37,7 +39,7 @@ const deleteProduct = asyncWrapper(async (req, res, next) => {
   }
   res.status(200).json({
     product: null,
-    status: "success",
+    success: true,
     message: "product deleted succesfully",
   });
 });

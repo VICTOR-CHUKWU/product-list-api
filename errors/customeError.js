@@ -6,6 +6,7 @@ class CustomApiError extends Error {
 }
 
 const createCustomeError = (msg, statusCode) => {
+  console.log(statusCode, "status code");
   return new CustomApiError(msg, statusCode);
 };
 
