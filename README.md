@@ -56,11 +56,11 @@
 
 <!-- LIVE DEMO -->
 
-## 🚀 Live Demo <a name="live-demo"></a>
+## 🚀 Live Link <a name="live-demo"></a>
 
 > Coming soon
 
-<!-- [Live demo link](https://metrics-webapp-jwa8.onrender.com/) -->
+[Live link](https://okenwa-app-m54d.onrender.com/api/v1/products)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
