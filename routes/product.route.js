@@ -13,9 +13,9 @@ router.get("/", getProducts);
 
 router.post("/", authMidleware, createProduct);
 
-router.patch("/:id", editProduct);
+router.patch("/:id", authMidleware, editProduct);
 
-router.delete("/:id", deleteProduct);
+router.delete("/:id", authMidleware, deleteProduct);
 
 router.get("/:id", getProduct);
 

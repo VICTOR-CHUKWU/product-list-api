@@ -31,7 +31,12 @@ const createProduct = asyncWrapper(async (req, res, next) => {
 });
 
 const deleteProduct = asyncWrapper(async (req, res, next) => {
-  const product = await Product.findByIdAndRemove(req.params.id);
+  const { id } = req.user;
+  // const product = await Product.findByIdAndRemove(req.params.id);
+  const product = await Product.findOneAndRemove({
+    _id: req.params.id,
+    user_id: id,
+  });
   if (!product) {
     return next(
       createCustomeError(`can not delete product with id ${req.params.id}`, 404)
@@ -45,17 +50,25 @@ const deleteProduct = asyncWrapper(async (req, res, next) => {
 });
 
 const editProduct = asyncWrapper(async (req, res, next) => {
+  const { id: userId } = req.user;
   const { id: productId } = req.params;
-  const product = await Product.findByIdAndUpdate(productId, req.body, {
-    new: true,
-    runValidators: true,
-  });
+  // const product = await Product.findByIdAndUpdate(productId, req.body, {
+  //   new: true,
+  //   runValidators: true,
+  // });
+  const product = await Product.findOneAndUpdate(
+    { _id: productId, user_id: userId }, // search criteria
+    { $set: req.body }, // update fields
+    { new: true } // return the updated product
+  );
   if (!product) {
     return next(
       createCustomeError(`can not update product with id ${req.params.id}`, 404)
     );
   }
-  res.status(200).json({ product });
+  res
+    .status(200)
+    .json({ success: true, message: "product updated succesfully", product });
 });
 
 module.exports = {

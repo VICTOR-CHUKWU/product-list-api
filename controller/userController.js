@@ -39,30 +39,36 @@ const createUser = asyncWrapper(async (req, res, next) => {
 
 const getUser = asyncWrapper(async (req, res, next) => {
   const { email, password } = req.body;
-  if (!email || password) {
+  if (!email || !password) {
     return next(createCustomeError("bad request", 400));
   }
   const user = await User.findOne({ email }).exec();
+  // console.log(user, "user");
   if (!user) {
     return next(createCustomeError(`user not found`, 404));
   }
-  const passwordMatch = await user.comparePassword(password);
-  if (!passwordMatch) {
+  if (await bcrypt.compare(password, user.password)) {
+    const token = jwt.sign(
+      { id: user._id, name: user.name },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: 86400, // 24 hours
+      }
+    );
+    return res.status(200).json({
+      user: user,
+      success: true,
+      message: "logged in successfully",
+      token,
+    });
+  } else {
     return next(createCustomeError(`invalid password`, 404));
   }
-  const token = jwt.sign(
-    { id: user._id, name: user.name },
-    process.env.JWT_SECRET,
-    {
-      expiresIn: 86400, // 24 hours
-    }
-  );
-  res.status(200).json({
-    user: user,
-    success: true,
-    message: "logged in successfully",
-    token,
-  });
+  // const passwordMatch = await user.comparePassword(password);
+  // console.log(passwordMatch, "pass match");
+  // if (!passwordMatch) {
+  //   return next(createCustomeError(`invalid password`, 404));
+  // }
 });
 
 module.exports = {
